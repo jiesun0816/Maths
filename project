@@ -1,0 +1,65 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+
+public class Maths {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		 System.out.println("请输入表达式：");
+		 BufferedReader reader=new BufferedReader(new InputStreamReader(System.in));
+		 String str=reader.readLine();
+		 while(!str.equals("")){
+			 double r=opt(str);
+			 if(r==-999999) System.out.println("表达式有误！");
+             else System.out.println("运算结果为："+r+"");
+             System.out.println("请输入表达式：");
+             str=reader.readLine();
+         }
+		 if(reader!=null) reader.close();
+	}
+	
+	public static double opt(String s){
+		if(s == null || "".equals(s.trim())) {
+            return 0f;
+        }
+        int a1=s.indexOf("+");
+        int a2=s.indexOf("-");
+        int a3=s.indexOf("*");
+        int a4=s.indexOf("/");
+        int a5=s.indexOf("(");
+        if(a1==-1&&a2==-1&&a3==-1&&a4==-1){
+            if(s.trim()==null||"".equals(s.trim())) return -999999;
+            int a=s.indexOf("^");
+            if(a!=-1) return Math.pow(opt(s.substring(0,a)),opt(s.substring(a+1,s.length())));
+            return Double.parseDouble(s.trim());
+        }
+         
+        if(a5!=-1){
+        int a6=s.indexOf(")");
+            if(a6==-1){
+            	return -999999;
+            }else{
+            	double f=opt(s.substring(a5+1,a6).trim());
+                s=s.replace(s.substring(a5,a6+1), String.valueOf(f));
+                return opt(s);
+            }
+        }
+         
+        if(a1!=-1){
+            return opt(s.substring(0,a1))+opt(s.substring(a1+1,s.length()));
+        }
+        if(a2!=-1){
+            return opt(s.substring(0,a2))-opt(s.substring(a2+1,s.length()));
+        }
+        if(a3!=-1){
+            return opt(s.substring(0,a3))*opt(s.substring(a3+1,s.length()));
+        }
+        if(a4!=-1){
+            return opt(s.substring(0,a4))/opt(s.substring(a4+1,s.length()));
+        }
+        return Double.parseDouble(s.trim());
+	}
+
+}
